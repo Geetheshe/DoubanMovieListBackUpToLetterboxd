@@ -12,7 +12,7 @@ class DoubanCrawler:
         self.cookies = user_cookies
         self.page_number = start_number / 15 + 1
 
-    def req(self, url):
+    def req(self, url, file_name):
         r1 = requests.request("GET", url=url, headers=self.headers, cookies=self.cookies)
         print(f'看过的第{int(self.page_number)}页响应状态码：{r1.status_code}')
         list_soup = BeautifulSoup(r1.text, 'lxml')
@@ -68,7 +68,7 @@ class DoubanCrawler:
             except AttributeError:
                 imdb_id = ""
 
-            data = open("LetterboxdData.csv", "a", newline="", encoding="utf_8_sig")
+            data = open(f"{file_name}.csv", "a", newline="", encoding="utf_8_sig")
             csv_write = csv.writer(data)
             csv_head = [movie_title, imdb_id, movie_rate, movie_date, movie_tag, movie_comment]
             csv_write.writerow(csv_head)
