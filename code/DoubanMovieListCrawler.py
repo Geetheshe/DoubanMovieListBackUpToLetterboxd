@@ -7,13 +7,12 @@ from bs4 import BeautifulSoup
 
 
 class DoubanCrawler:
-    def __init__(self, user_cookies, start_number):
+    def __init__(self, start_number):
         self.headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36"}
-        self.cookies = user_cookies
         self.page_number = start_number / 15 + 1
 
     def req(self, url, file_name):
-        r1 = requests.request("GET", url=url, headers=self.headers, cookies=self.cookies)
+        r1 = requests.request("GET", url=url, headers=self.headers)
         print(f'看过的第{int(self.page_number)}页响应状态码：{r1.status_code}')
         list_soup = BeautifulSoup(r1.text, 'lxml')
         movies_list = list_soup.find_all("div", class_="item")
@@ -58,7 +57,7 @@ class DoubanCrawler:
             movie_link = movie.find("a", href=True)["href"]
 
             # 获取条目详情中的IMDB链接、标签
-            r2 = requests.request("GET", url=movie_link, headers=self.headers, cookies=self.cookies)
+            r2 = requests.request("GET", url=movie_link, headers=self.headers)
             print(f'《{movie_title}》的详情页访问状态为{r2.status_code}。')
             detail_soup = BeautifulSoup(r2.text, 'lxml')
 

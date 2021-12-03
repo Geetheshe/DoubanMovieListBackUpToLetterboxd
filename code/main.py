@@ -5,7 +5,6 @@ import csv
 def main():
     user_id = input("----------------------------------------------------\n"
                     "请输入豆瓣用户id：")
-    user_cookies = add_cookies()
 
     start_page_number = int(input("----------------------------------------------------\n"
                                   "请输入从第几页开始备份（输入数字即可）："))
@@ -23,7 +22,7 @@ def main():
     f.flush()
 
     while start_number <= end_number:
-        watched_to_notion = DoubanCrawler(start_number=start_number, user_cookies=user_cookies)
+        watched_to_notion = DoubanCrawler(start_number=start_number)
         watched_url = f"https://movie.douban.com/people/{user_id}/collect?start={start_number}&sort=time&rating=all&filter=all&mode=grid"
         watched_to_notion.req(url=watched_url, file_name=file_name)
         start_number += 15
