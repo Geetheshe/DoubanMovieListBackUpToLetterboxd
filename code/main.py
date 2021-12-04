@@ -3,9 +3,14 @@ import csv
 
 
 def main():
+    # 输入用户id
     user_id = input("----------------------------------------------------\n"
                     "请输入豆瓣用户id：")
 
+    # 输入用户cookies，把字符串转成字典
+    user_cookies = add_cookies()
+
+    # 选择备份页数区间
     start_page_number = int(input("----------------------------------------------------\n"
                                   "请输入从第几页开始备份（输入数字即可）："))
     start_number = (start_page_number - 1) * 15
@@ -13,6 +18,7 @@ def main():
                                 "请输入备份到第几页（输入数字即可）："))
     end_number = (end_page_number - 1) * 15
 
+    # 创建csv文件
     file_name = input("----------------------------------------------------\n"
                       "请创建CSV的文件名(无需添加.csv后缀)：")
     f = open(f"{file_name}.csv", "w", newline="", encoding="utf_8_sig")
@@ -21,12 +27,14 @@ def main():
     csv_write.writerow(csv_head)
     f.flush()
 
+    # 准备工作完成，开始备份
     while start_number <= end_number:
-        watched_to_notion = DoubanCrawler(start_number=start_number)
+        watched_to_letterboxd = DoubanCrawler(start_number=start_number, user_cookies=user_cookies)
         watched_url = f"https://movie.douban.com/people/{user_id}/collect?start={start_number}&sort=time&rating=all&filter=all&mode=grid"
-        watched_to_notion.req(url=watched_url, file_name=file_name)
+        watched_to_letterboxd.req(url=watched_url, file_name=file_name)
         start_number += 15
 
+    # 关闭文件并退出
     f.close()
     input("备份已完成，请按Enter回车键退出。")
     exit()
