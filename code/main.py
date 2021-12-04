@@ -28,7 +28,7 @@ def main():
         start_number += 15
 
     f.close()
-    input("按Enter回车键退出")
+    input("备份已完成，请按Enter回车键退出。")
     exit()
 
 
