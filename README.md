@@ -17,7 +17,7 @@
 3. 输入文件名创建csv文件
 4. 等待抓取结束
 5. 打开csv文件，可使用excel打开，将标记时间那一列的单元格格式改为“yyyy-mm-dd”
-6. 在Letterboxd的“Settings”选项中，找到“IMPORT & ECPORT”一栏，选择“IMPORT YOUR DATA”，选择csv文件进行上传
+6. 在Letterboxd的“Settings”选项中，找到“IMPORT & EXPORT”一栏，选择“IMPORT YOUR DATA”，选择csv文件进行上传
 7. 根据Letterboxd给出的信息进行细微调整，查缺补漏同步的条目，确认无误后选择“IMPORT FILMS”即可
 
 ## 注意事项
