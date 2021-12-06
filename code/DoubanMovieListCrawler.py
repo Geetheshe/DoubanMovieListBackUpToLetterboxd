@@ -11,6 +11,7 @@ class DoubanCrawler:
         self.headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36"}
         self.page_number = start_number / 15 + 1
         self.cookies = user_cookies
+        self.fail = []
 
     def req(self, url, file_name):
         r1 = requests.request("GET", url=url, headers=self.headers, cookies=self.cookies)
@@ -62,7 +63,7 @@ class DoubanCrawler:
                 # 获取条目详情中的IMDB链接、标签
                 r2 = requests.request("GET", url=movie_link, headers=self.headers, cookies=self.cookies)
                 if r2.status_code == 200:
-                    print(f'《{movie_title}》可以访问，正在收集IMDb ID……')
+                    print(f'《{movie_title}》可以访问，此条目备份成功')
                     detail_soup = BeautifulSoup(r2.text, 'lxml')
 
                     # 条目imdb id
@@ -71,8 +72,9 @@ class DoubanCrawler:
                     except AttributeError:
                         imdb_id = ""
                 else:
-                    print(f'《{movie_title}》不可访问，IMDb ID收集失败。')
+                    print(f'《{movie_title}》不可访问，此条目备份失败。')
                     imdb_id = ""
+                    self.fail.append(movie_title)
 
                 data = open(f"{file_name}.csv", "a", newline="", encoding="utf_8_sig")
                 csv_write = csv.writer(data)
@@ -83,4 +85,6 @@ class DoubanCrawler:
                 time.sleep(random.randint(5, 10))
         else:
             print("----------------------------------------------------\n"
-                  f"看过的第{int(self.page_number)}页访问失败，试试下一页……")
+                  f"看过的第{int(self.page_number)}页访问失败，正在试试下一页……")
+            movie_title = f"第{int(self.page_number)}页全部条目"
+            self.fail.append(movie_title)

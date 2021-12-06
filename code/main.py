@@ -27,16 +27,21 @@ def main():
     csv_write.writerow(csv_head)
     f.flush()
 
+    watched_to_letterboxd = DoubanCrawler(start_number=start_number, user_cookies=user_cookies)
+
     # 准备工作完成，开始备份
     while start_number <= end_number:
-        watched_to_letterboxd = DoubanCrawler(start_number=start_number, user_cookies=user_cookies)
         watched_url = f"https://movie.douban.com/people/{user_id}/collect?start={start_number}&sort=time&rating=all&filter=all&mode=grid"
         watched_to_letterboxd.req(url=watched_url, file_name=file_name)
         start_number += 15
 
     # 关闭文件并退出
     f.close()
-    input("备份已完成，请按Enter回车键退出。")
+    if len(watched_to_letterboxd.fail) != 0:
+        print(f"备份已完成，以下条目信息有缺失：{watched_to_letterboxd.fail}")
+    else:
+        print("备份已完成。")
+    input("请按Enter回车键退出。")
     exit()
 
 
@@ -45,7 +50,7 @@ def add_cookies():
                         '请输入你的豆瓣cookies:')
     if cookies_str[0:3] == "ll=":
         cookies_dict = {}
-        cookies_list = cookies_str.split('; ')
+        cookies_list = cookies_str.replace('"', "").split('; ')
         for i in cookies_list:
             name, value = i.split('=', 1)
             cookies_dict[f'{name}'] = value
