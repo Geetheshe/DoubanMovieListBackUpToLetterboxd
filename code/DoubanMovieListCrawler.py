@@ -17,7 +17,7 @@ class DoubanCrawler:
         r1 = requests.request("GET", url=url, headers=self.headers, cookies=self.cookies)
         if r1.status_code == 200:
             print("----------------------------------------------------\n"
-                  f"看过的第{int(self.page_number)}页访问成功，开始备份……")
+                  f"看过的第{int(page_number)}页访问成功，开始备份……")
             list_soup = BeautifulSoup(r1.text, 'lxml')
             movies_list = list_soup.find_all("div", class_="item")
             for movie in movies_list:
