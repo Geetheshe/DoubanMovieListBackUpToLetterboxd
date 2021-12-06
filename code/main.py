@@ -27,12 +27,12 @@ def main():
     csv_write.writerow(csv_head)
     f.flush()
 
-    watched_to_letterboxd = DoubanCrawler(start_number=start_number, user_cookies=user_cookies)
+    watched_to_letterboxd = DoubanCrawler(user_cookies=user_cookies)
 
     # 准备工作完成，开始备份
     while start_number <= end_number:
         watched_url = f"https://movie.douban.com/people/{user_id}/collect?start={start_number}&sort=time&rating=all&filter=all&mode=grid"
-        watched_to_letterboxd.req(url=watched_url, file_name=file_name)
+        watched_to_letterboxd.req(url=watched_url, file_name=file_name, start_number=start_number)
         start_number += 15
 
     # 关闭文件并退出

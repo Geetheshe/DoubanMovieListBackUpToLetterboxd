@@ -7,13 +7,13 @@ from bs4 import BeautifulSoup
 
 
 class DoubanCrawler:
-    def __init__(self, start_number, user_cookies):
+    def __init__(self, user_cookies):
         self.headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36"}
-        self.page_number = start_number / 15 + 1
         self.cookies = user_cookies
         self.fail = []
 
-    def req(self, url, file_name):
+    def req(self, url, file_name, start_number):
+        page_number = start_number / 15 + 1
         r1 = requests.request("GET", url=url, headers=self.headers, cookies=self.cookies)
         if r1.status_code == 200:
             print("----------------------------------------------------\n"
@@ -71,6 +71,7 @@ class DoubanCrawler:
                         imdb_id = detail_soup.find("span", class_="pl", text=re.compile("IMDb")).next_sibling.lstrip()
                     except AttributeError:
                         imdb_id = ""
+                        self.fail.append(movie_title)
                 else:
                     print(f'《{movie_title}》不可访问，此条目备份失败。')
                     imdb_id = ""
