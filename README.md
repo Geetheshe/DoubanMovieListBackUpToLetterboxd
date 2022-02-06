@@ -1,4 +1,4 @@
-# DoubanMovieListSentToLetterboxd
+# DoubanMovieListBackUpToLetterboxd
 
 ## 说明
 爬虫豆瓣标记“看过”的影视条目信息，包括标题、IMDb ID、打分、标记时间、标签、短评，并制成CSV，可上传至Letterboxd进行同步。
