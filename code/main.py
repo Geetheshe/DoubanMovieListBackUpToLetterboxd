@@ -48,7 +48,7 @@ def main():
 def add_cookies():
     cookies_str = input('----------------------------------------------------\n'
                         '请输入你的豆瓣cookies:')
-    if cookies_str[0:3] == "ll=":
+    if cookies_str[0:3] == "ll=" or cookies_str[0:3] == "bid":
         cookies_dict = {}
         cookies_list = cookies_str.replace('"', "").split('; ')
         for i in cookies_list:
