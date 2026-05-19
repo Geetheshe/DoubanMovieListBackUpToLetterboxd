@@ -1,5 +1,6 @@
 from DoubanMovieListCrawler import *
 import csv
+from http.cookies import SimpleCookie
 
 
 def main():
@@ -32,7 +33,8 @@ def main():
     # 准备工作完成，开始备份
     while start_number <= end_number:
         watched_url = f"https://movie.douban.com/people/{user_id}/collect?start={start_number}&sort=time&rating=all&filter=all&mode=grid"
-        watched_to_letterboxd.req(url=watched_url, file_name=file_name, start_number=start_number)
+        watched_to_letterboxd.req(
+            url=watched_url, file_name=file_name, start_number=start_number)
         start_number += 15
 
     # 关闭文件并退出
@@ -48,16 +50,31 @@ def main():
 def add_cookies():
     cookies_str = input('----------------------------------------------------\n'
                         '请输入你的豆瓣cookies:')
-    if cookies_str[0:3] == "ll=" or cookies_str[0:3] == "bid":
-        cookies_dict = {}
-        cookies_list = cookies_str.replace('"', "").split('; ')
-        for i in cookies_list:
-            name, value = i.split('=', 1)
-            cookies_dict[f'{name}'] = value
-        return cookies_dict
-    else:
+
+    cookies_str = cookies_str.strip()
+
+    # 兼容用户把“cookies:”/“cookie:”一起复制进来的情况
+    lower_cookies = cookies_str.lower()
+    for prefix in ("cookies:", "cookie:", "cookies =", "cookie =", "cookies=", "cookie=", "cookies：", "cookie："):
+        if lower_cookies.startswith(prefix):
+            cookies_str = cookies_str[len(prefix):].strip()
+            break
+
+    cookie = SimpleCookie()
+
+    try:
+        cookie.load(cookies_str)
+    except Exception:
         print("你输入的豆瓣cookies可能有误，请再重新试试吧！")
-        add_cookies()
+        return add_cookies()
+
+    cookies_dict = {key: morsel.value for key, morsel in cookie.items()}
+
+    if not cookies_dict:
+        print("你输入的豆瓣cookies可能有误，请再重新试试吧！")
+        return add_cookies()
+
+    return cookies_dict
 
 
 if __name__ == "__main__":
